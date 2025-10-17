@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giao Đồ Ăn Nhanh</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
+        <div class="container">
+            <a class="navbar-brand" href="#">🍕 Giao Đồ Ăn Nhanh</a>
+            <button class="btn btn-outline-light" id="reportBtn">⚠️ Báo Lỗi</button>
+        </div>
+    </nav>
+
+    <div class="container my-4">
+        <!-- Thông tin Shop -->
+        <div class="alert alert-info">
+            <strong>📍 Địa chỉ Shop:</strong> <span id="shopAddress">Đang tải...</span>
+        </div>
+
+        <!-- Menu Món Ăn -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h3 class="mb-3">📋 Thực Đơn</h3>
+                <div id="menuContainer" class="row">
+                    <div class="col-12 text-center py-5">
+                        <div class="spinner-border text-danger" role="status">
+                            <span class="visually-hidden">Đang tải...</span>
+                        </div>
+                        <p class="mt-2">Đang tải thực đơn...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Giỏ Hàng -->
+            <div class="col-md-4">
+                <div class="cart-sticky">
+                    <h4 class="mb-3">🛒 Giỏ Hàng</h4>
+                    <div id="cartItems" class="cart-items mb-3">
+                        <p class="text-muted text-center">Giỏ hàng trống</p>
+                    </div>
+                    <div class="cart-summary">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Tổng món:</span>
+                            <strong id="subtotal">0đ</strong>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Phí vận chuyển:</span>
+                            <strong id="shippingFee">0đ</strong>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-3">
+                            <strong>Tổng cộng:</strong>
+                            <strong class="text-danger" id="totalAmount">0đ</strong>
+                        </div>
+                        <button class="btn btn-danger w-100" id="checkoutBtn" disabled>Đặt Hàng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Đặt Hàng -->
+    <div class="modal fade" id="checkoutModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">📝 Thông Tin Đặt Hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="orderForm">
+                        <div class="mb-3">
+                            <label class="form-label">Họ và tên *</label>
+                            <input type="text" class="form-control" id="customerName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Số điện thoại *</label>
+                            <input type="tel" class="form-control" id="customerPhone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Địa chỉ giao hàng *</label>
+                            <textarea class="form-control" id="customerAddress" rows="3" required></textarea>
+                            <small class="text-muted">Vui lòng nhập địa chỉ chi tiết</small>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ghi chú</label>
+                            <textarea class="form-control" id="orderNote" rows="2"></textarea>
+                        </div>
+                        <div class="alert alert-warning">
+                            <small>📍 Khoảng cách ước tính: <strong id="estimatedDistance">Đang tính...</strong></small><br>
+                            <small>💰 Phí ship: <strong id="modalShippingFee">0đ</strong></small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-danger" id="confirmOrderBtn">Xác Nhận Đặt Hàng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Báo Lỗi -->
+    <div class="modal fade" id="reportModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">⚠️ Báo Lỗi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="reportForm">
+                        <div class="mb-3">
+                            <label class="form-label">Tên của bạn</label>
+                            <input type="text" class="form-control" id="reporterName">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Mô tả lỗi *</label>
+                            <textarea class="form-control" id="reportDescription" rows="4" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-warning" id="submitReportBtn">Gửi Báo Cáo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
